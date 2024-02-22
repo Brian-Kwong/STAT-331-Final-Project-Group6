@@ -2,10 +2,7 @@
 Statistical Analysis Project : D
 
 ## Group Members
-
-<li>
-  * Joey Bailitz </ul> 
-  * Arneh Begi </ul>
-  * Brian Kwong </ul>
-  * Connor Gamba </ul>
-</li>
+  * Joey Bailitz 
+  * Arneh Begi
+  * Brian Kwong 
+  * Connor Gamba 
