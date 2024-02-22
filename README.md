@@ -1,10 +1,10 @@
 # STAT-331-Final-Project-Group6
-Statstical Anyalsis Project : D
+Statistical Analysis Project : D
 
 ## Group Members
 <li>
-  - Joey Bailitz
-  - Arneh Begi
-  - Brian Kwong
-  - Connor Gamba
+  <ul> Joey Bailitz </ul> 
+  <ul> Arneh Begi </ul>
+  <ul> Brian Kwong </ul>
+  <ul> Connor Gamba </ul>
 </li>
