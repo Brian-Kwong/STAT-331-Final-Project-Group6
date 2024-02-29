@@ -6,7 +6,8 @@ format: html
 ## Names:
   * Brian Kwong
   * Connor Gamba
-
+  * Joey Bailitz
+  * Arneh Begi
 
 ## Quarto
 
