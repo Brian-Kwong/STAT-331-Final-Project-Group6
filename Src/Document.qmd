@@ -6,7 +6,7 @@ format: html
 ## Names:
   * Brian Kwong
   * Connor Gamba
-
+  * Joey Bailitz
 
 ## Quarto
 
