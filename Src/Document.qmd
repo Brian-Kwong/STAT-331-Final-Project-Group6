@@ -5,6 +5,7 @@ format: html
 
 ## Names:
   * Brian Kwong
+  * Connor Gamba
 
 
 ## Quarto
