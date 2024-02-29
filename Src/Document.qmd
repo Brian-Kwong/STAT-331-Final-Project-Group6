@@ -7,6 +7,7 @@ format: html
   * Brian Kwong
   * Connor Gamba
   * Joey Bailitz
+  * Arneh Begi
 
 ## Quarto
 
