@@ -41,8 +41,9 @@ remove(list = as.vector(ls()))
 library(tidyverse)
 library(janitor)
 library(styler)
-# Formats documents:
 
+# Formats documents:
+style_file(path = here::here("Src", "Correlation_of_Country_Goverment_Index_&_GDP_Captia.qmd"), style = tidyverse_style, strict = TRUE)
 ```
 
 # Background 
@@ -53,9 +54,9 @@ The following data contains data collected on countries GDP and independent inte
 ## Importing the Data
 
 ```{r}
-curruption_data <- read_csv(here::here("Datasets","abscorrup_idea.csv"),show_col_types = FALSE) |> janitor::clean_names()
+curruption_data <- read_csv(here::here("Datasets", "abscorrup_idea.csv"), show_col_types = FALSE) |> janitor::clean_names()
 
-gdp_per_cap_data <- read_csv(here::here("Datasets","gdp_pcap.csv"),show_col_types = FALSE) |> janitor::clean_names()
+gdp_per_cap_data <- read_csv(here::here("Datasets", "gdp_pcap.csv"), show_col_types = FALSE) |> janitor::clean_names()
 ```
 
 
@@ -63,23 +64,28 @@ gdp_per_cap_data <- read_csv(here::here("Datasets","gdp_pcap.csv"),show_col_type
 Since our corruption only has data for years between [1975,2021] we filter our GDP per captia to those years too
 
 ```{r}
-gdp_per_cap_data <- gdp_per_cap_data |> select(country,c(x1975:x2021))
+gdp_per_cap_data <- gdp_per_cap_data |> select(country, c(x1975:x2021))
 ```
 
 
 ## Piviot Data to Long Format
 
 ```{r}
-curruption_data <- curruption_data |> pivot_longer(cols = c(x1975:x2021),names_to = "Year",values_to = "Absence_Corruption_Index") |> mutate(Absence_Corruption_Index = as.numeric(Absence_Corruption_Index))
+curruption_data <- curruption_data |>
+  pivot_longer(cols = c(x1975:x2021), names_to = "Year", values_to = "Absence_Corruption_Index") |>
+  mutate(Absence_Corruption_Index = as.numeric(Absence_Corruption_Index))
 
-gdp_per_cap_data <- gdp_per_cap_data |> pivot_longer(cols = c(x1975:x2021),names_to = "Year",values_to = "GDP_Per_Capita") |> mutate(GDP_Per_Capita = str_replace_all(GDP_Per_Capita,"k","000")) |> mutate(GDP_Per_Capita = as.numeric(GDP_Per_Capita))
+gdp_per_cap_data <- gdp_per_cap_data |>
+  pivot_longer(cols = c(x1975:x2021), names_to = "Year", values_to = "GDP_Per_Capita") |>
+  mutate(GDP_Per_Capita = str_replace_all(GDP_Per_Capita, "k", "000")) |>
+  mutate(GDP_Per_Capita = as.numeric(GDP_Per_Capita))
 ```
 
 
 ## Data Joins
 
 ```{r}
-full_data <- curruption_data |> inner_join(gdp_per_cap_data,by = c("country","Year"))
+full_data <- curruption_data |> inner_join(gdp_per_cap_data, by = c("country", "Year"))
 ```
 
 ## Understanding Our Data
@@ -102,7 +108,11 @@ knitr::include_graphics(here::here("Figures", "ERDiagram.png"))
 
 Below is a quick summary of the average mean absense corruption Index and GDP per Captia out of every country for every year
 ```{r}
-full_data |> group_by(country) |> mutate(across(.cols = c(Absence_Corruption_Index,GDP_Per_Capita),.fns = ~mean(.x,na.rm = TRUE))) |> group_by(Year) |> summary(across(.cols = c(Absence_Corruption_Index,GDP_Per_Capita),.fns = ~mean(.x,na.rm = TRUE)))
+full_data |>
+  group_by(country) |>
+  mutate(across(.cols = c(Absence_Corruption_Index, GDP_Per_Capita), .fns = ~ mean(.x, na.rm = TRUE))) |>
+  group_by(Year) |>
+  summary(across(.cols = c(Absence_Corruption_Index, GDP_Per_Capita), .fns = ~ mean(.x, na.rm = TRUE)))
 ```
 ## About those Pesky NAs
 One thing we do want to acknowledge is the presence of NAs in our datasheet particularly in the corruption index.  There could be a multitude of reasons why this that data isn't present for a country in a particular year: data was lost, data was measured/calculated incorrectly, some disaster prevent the data from being collected, insufficient stability for determination to occur or the government doesn't want the public to know about their corruption therefore attempts to censor it.  All these factors some, randomized some not will be taken into our consideration when determining the relationship between corruption index and GDP per captia

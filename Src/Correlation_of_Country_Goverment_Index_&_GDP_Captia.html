@@ -3094,7 +3094,9 @@ vertical-align: -.125em;
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(styler)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Formats documents:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Formats documents:</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">style_file</span>(<span class="at">path =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Src&quot;</span>, <span class="st">&quot;Correlation_of_Country_Goverment_Index_&amp;_GDP_Captia.qmd&quot;</span>), <span class="at">style =</span> tidyverse_style, <span class="at">strict =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -3109,9 +3111,9 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>,<span class="st">&quot;abscorrup_idea.csv&quot;</span>),<span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>, <span class="st">&quot;abscorrup_idea.csv&quot;</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>,<span class="st">&quot;gdp_pcap.csv&quot;</span>),<span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>, <span class="st">&quot;gdp_pcap.csv&quot;</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -3121,7 +3123,7 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span> <span class="fu">select</span>(country,<span class="fu">c</span>(x1975<span class="sc">:</span>x2021))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span> <span class="fu">select</span>(country, <span class="fu">c</span>(x1975<span class="sc">:</span>x2021))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -3130,9 +3132,14 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021),<span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>,<span class="at">values_to =</span> <span class="st">&quot;Absence_Corruption_Index&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">Absence_Corruption_Index =</span> <span class="fu">as.numeric</span>(Absence_Corruption_Index))</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021),<span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>,<span class="at">values_to =</span> <span class="st">&quot;GDP_Per_Capita&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">str_replace_all</span>(GDP_Per_Capita,<span class="st">&quot;k&quot;</span>,<span class="st">&quot;000&quot;</span>)) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">as.numeric</span>(GDP_Per_Capita))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021), <span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;Absence_Corruption_Index&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Absence_Corruption_Index =</span> <span class="fu">as.numeric</span>(Absence_Corruption_Index))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021), <span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;GDP_Per_Capita&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">str_replace_all</span>(GDP_Per_Capita, <span class="st">&quot;k&quot;</span>, <span class="st">&quot;000&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">as.numeric</span>(GDP_Per_Capita))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -3141,7 +3148,7 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>full_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(gdp_per_cap_data,<span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>,<span class="st">&quot;Year&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>full_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(gdp_per_cap_data, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;Year&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
@@ -3205,7 +3212,11 @@ vertical-align: -.125em;
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>full_data <span class="sc">|&gt;</span> <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index,GDP_Per_Capita),<span class="at">.fns =</span> <span class="sc">~</span><span class="fu">mean</span>(.x,<span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Year) <span class="sc">|&gt;</span> <span class="fu">summary</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index,GDP_Per_Capita),<span class="at">.fns =</span> <span class="sc">~</span><span class="fu">mean</span>(.x,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>full_data <span class="sc">|&gt;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index, GDP_Per_Capita), <span class="at">.fns =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">|&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index, GDP_Per_Capita), <span class="at">.fns =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>   country              Year           Absence_Corruption_Index
@@ -3566,74 +3577,84 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(janitor)</span>
 <span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(styler)</span>
-<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a><span class="co"># Formats documents:</span></span>
-<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a><span class="fu"># Background </span></span>
-<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a>The following data contains data collected on countries GDP and independent international calculation of a absence of corruption index from a variety of factors including government transparency, public official use of state dollars for personal gain and general trust in government officials being truthful in their actions between the years 1975 and 2021.  Higher absence corruption index signals ***lower*** perceived corruption.</span>
-<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a><span class="fu"># Our Data</span></span>
-<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="fu">## Importing the Data</span></span>
-<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-59"><a href="#cb9-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>,<span class="st">&quot;abscorrup_idea.csv&quot;</span>),<span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
-<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>,<span class="st">&quot;gdp_pcap.csv&quot;</span>),<span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
-<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a><span class="co"># Formats documents:</span></span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a><span class="fu">style_file</span>(<span class="at">path =</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Src&quot;</span>, <span class="st">&quot;Correlation_of_Country_Goverment_Index_&amp;_GDP_Captia.qmd&quot;</span>), <span class="at">style =</span> tidyverse_style, <span class="at">strict =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-50"><a href="#cb9-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-51"><a href="#cb9-51" aria-hidden="true" tabindex="-1"></a><span class="fu"># Background </span></span>
+<span id="cb9-52"><a href="#cb9-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-53"><a href="#cb9-53" aria-hidden="true" tabindex="-1"></a>The following data contains data collected on countries GDP and independent international calculation of a absence of corruption index from a variety of factors including government transparency, public official use of state dollars for personal gain and general trust in government officials being truthful in their actions between the years 1975 and 2021.  Higher absence corruption index signals ***lower*** perceived corruption.</span>
+<span id="cb9-54"><a href="#cb9-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-55"><a href="#cb9-55" aria-hidden="true" tabindex="-1"></a><span class="fu"># Our Data</span></span>
+<span id="cb9-56"><a href="#cb9-56" aria-hidden="true" tabindex="-1"></a><span class="fu">## Importing the Data</span></span>
+<span id="cb9-57"><a href="#cb9-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-60"><a href="#cb9-60" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-61"><a href="#cb9-61" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>, <span class="st">&quot;abscorrup_idea.csv&quot;</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
+<span id="cb9-62"><a href="#cb9-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-63"><a href="#cb9-63" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Datasets&quot;</span>, <span class="st">&quot;gdp_pcap.csv&quot;</span>), <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">|&gt;</span> janitor<span class="sc">::</span><span class="fu">clean_names</span>()</span>
+<span id="cb9-64"><a href="#cb9-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb9-65"><a href="#cb9-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matching Our Daaset</span></span>
-<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a>Since our corruption only has data for years between <span class="co">[</span><span class="ot">1975,2021</span><span class="co">]</span> we filter our GDP per captia to those years too</span>
-<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-71"><a href="#cb9-71" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span> <span class="fu">select</span>(country,<span class="fu">c</span>(x1975<span class="sc">:</span>x2021))</span>
-<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-66"><a href="#cb9-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-67"><a href="#cb9-67" aria-hidden="true" tabindex="-1"></a><span class="fu">## Matching Our Daaset</span></span>
+<span id="cb9-68"><a href="#cb9-68" aria-hidden="true" tabindex="-1"></a>Since our corruption only has data for years between <span class="co">[</span><span class="ot">1975,2021</span><span class="co">]</span> we filter our GDP per captia to those years too</span>
+<span id="cb9-69"><a href="#cb9-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-72"><a href="#cb9-72" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-73"><a href="#cb9-73" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span> <span class="fu">select</span>(country, <span class="fu">c</span>(x1975<span class="sc">:</span>x2021))</span>
+<span id="cb9-74"><a href="#cb9-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb9-75"><a href="#cb9-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Piviot Data to Long Format</span></span>
-<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-80"><a href="#cb9-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021),<span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>,<span class="at">values_to =</span> <span class="st">&quot;Absence_Corruption_Index&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">Absence_Corruption_Index =</span> <span class="fu">as.numeric</span>(Absence_Corruption_Index))</span>
-<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021),<span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>,<span class="at">values_to =</span> <span class="st">&quot;GDP_Per_Capita&quot;</span>) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">str_replace_all</span>(GDP_Per_Capita,<span class="st">&quot;k&quot;</span>,<span class="st">&quot;000&quot;</span>)) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">as.numeric</span>(GDP_Per_Capita))</span>
-<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-76"><a href="#cb9-76" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-77"><a href="#cb9-77" aria-hidden="true" tabindex="-1"></a><span class="fu">## Piviot Data to Long Format</span></span>
+<span id="cb9-78"><a href="#cb9-78" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-81"><a href="#cb9-81" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-82"><a href="#cb9-82" aria-hidden="true" tabindex="-1"></a>curruption_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span></span>
+<span id="cb9-83"><a href="#cb9-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021), <span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;Absence_Corruption_Index&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-84"><a href="#cb9-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Absence_Corruption_Index =</span> <span class="fu">as.numeric</span>(Absence_Corruption_Index))</span>
 <span id="cb9-85"><a href="#cb9-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Joins</span></span>
-<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a>full_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(gdp_per_cap_data,<span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>,<span class="st">&quot;Year&quot;</span>))</span>
-<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-86"><a href="#cb9-86" aria-hidden="true" tabindex="-1"></a>gdp_per_cap_data <span class="ot">&lt;-</span> gdp_per_cap_data <span class="sc">|&gt;</span></span>
+<span id="cb9-87"><a href="#cb9-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="fu">c</span>(x1975<span class="sc">:</span>x2021), <span class="at">names_to =</span> <span class="st">&quot;Year&quot;</span>, <span class="at">values_to =</span> <span class="st">&quot;GDP_Per_Capita&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb9-88"><a href="#cb9-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">str_replace_all</span>(GDP_Per_Capita, <span class="st">&quot;k&quot;</span>, <span class="st">&quot;000&quot;</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb9-89"><a href="#cb9-89" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">GDP_Per_Capita =</span> <span class="fu">as.numeric</span>(GDP_Per_Capita))</span>
+<span id="cb9-90"><a href="#cb9-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-91"><a href="#cb9-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-92"><a href="#cb9-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-93"><a href="#cb9-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## Data Joins</span></span>
 <span id="cb9-94"><a href="#cb9-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-95"><a href="#cb9-95" aria-hidden="true" tabindex="-1"></a><span class="fu">## Understanding Our Data</span></span>
-<span id="cb9-96"><a href="#cb9-96" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a>The following ER diagram represents how our data is structured</span>
-<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{r include-flow-map, fig.align=&#39;center&#39;}</span></span>
-<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a><span class="co"># ER Diagram</span></span>
-<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Figures&quot;</span>, <span class="st">&quot;ERDiagram.png&quot;</span>))</span>
-<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a>| Variable | Type | Description |</span>
-<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a>|--|--|--|</span>
-<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a>| 🔑Country | String | Full Name of a Country |</span>
-<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>| 🔑Year | Int | Year This data was collected</span>
-<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a>| Country&#39;s Absence of Corruption Index | Optional(Double) | A index measuring how corrupt a perceived country&#39;s government is.  Lower value means less trust and more corruption.  NA means no data is unavailable for that year.  Please check the section about NA values for some possible reasons |</span>
-<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a>| GDP Per Captia | Double | Calculated GDP per Captia (GDP/Population)</span>
-<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
-<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>Below is a quick summary of the average mean absense corruption Index and GDP per Captia out of every country for every year</span>
-<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>full_data <span class="sc">|&gt;</span> <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index,GDP_Per_Capita),<span class="at">.fns =</span> <span class="sc">~</span><span class="fu">mean</span>(.x,<span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Year) <span class="sc">|&gt;</span> <span class="fu">summary</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index,GDP_Per_Capita),<span class="at">.fns =</span> <span class="sc">~</span><span class="fu">mean</span>(.x,<span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a><span class="fu">## About those Pesky NAs</span></span>
-<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>One thing we do want to acknowledge is the presence of NAs in our datasheet particularly in the corruption index.  There could be a multitude of reasons why this that data isn&#39;t present for a country in a particular year: data was lost, data was measured/calculated incorrectly, some disaster prevent the data from being collected, insufficient stability for determination to occur or the government doesn&#39;t want the public to know about their corruption therefore attempts to censor it.  All these factors some, randomized some not will be taken into our consideration when determining the relationship between corruption index and GDP per captia</span>
-<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a><span class="fu">## Possible Hypothesis </span></span>
-<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>We believe that a higher absence of corruption index will lead to a higher GDP per captia.  Traditionally are more stable and democratic forms of governments have higher standards of living,less internal/external conflicts, equal opportunities for all individuals and large amounts of well fares for their constituency.  They also in general have stronger economies that are more reliant to wild economic swings  For instance much of modern Europe has a high GDP per captia because of its modernization, democratic governments and tightintegration with the EU.</span>
+<span id="cb9-97"><a href="#cb9-97" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-98"><a href="#cb9-98" aria-hidden="true" tabindex="-1"></a>full_data <span class="ot">&lt;-</span> curruption_data <span class="sc">|&gt;</span> <span class="fu">inner_join</span>(gdp_per_cap_data, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">&quot;country&quot;</span>, <span class="st">&quot;Year&quot;</span>))</span>
+<span id="cb9-99"><a href="#cb9-99" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-100"><a href="#cb9-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-101"><a href="#cb9-101" aria-hidden="true" tabindex="-1"></a><span class="fu">## Understanding Our Data</span></span>
+<span id="cb9-102"><a href="#cb9-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-103"><a href="#cb9-103" aria-hidden="true" tabindex="-1"></a>The following ER diagram represents how our data is structured</span>
+<span id="cb9-104"><a href="#cb9-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-105"><a href="#cb9-105" aria-hidden="true" tabindex="-1"></a><span class="in">```{r include-flow-map, fig.align=&#39;center&#39;}</span></span>
+<span id="cb9-106"><a href="#cb9-106" aria-hidden="true" tabindex="-1"></a><span class="co"># ER Diagram</span></span>
+<span id="cb9-107"><a href="#cb9-107" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">include_graphics</span>(here<span class="sc">::</span><span class="fu">here</span>(<span class="st">&quot;Figures&quot;</span>, <span class="st">&quot;ERDiagram.png&quot;</span>))</span>
+<span id="cb9-108"><a href="#cb9-108" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-109"><a href="#cb9-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-110"><a href="#cb9-110" aria-hidden="true" tabindex="-1"></a>| Variable | Type | Description |</span>
+<span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a>|--|--|--|</span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>| 🔑Country | String | Full Name of a Country |</span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>| 🔑Year | Int | Year This data was collected</span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>| Country&#39;s Absence of Corruption Index | Optional(Double) | A index measuring how corrupt a perceived country&#39;s government is.  Lower value means less trust and more corruption.  NA means no data is unavailable for that year.  Please check the section about NA values for some possible reasons |</span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>| GDP Per Captia | Double | Calculated GDP per Captia (GDP/Population)</span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary</span></span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>Below is a quick summary of the average mean absense corruption Index and GDP per Captia out of every country for every year</span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>full_data <span class="sc">|&gt;</span></span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">|&gt;</span></span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index, GDP_Per_Capita), <span class="at">.fns =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>))) <span class="sc">|&gt;</span></span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(Year) <span class="sc">|&gt;</span></span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summary</span>(<span class="fu">across</span>(<span class="at">.cols =</span> <span class="fu">c</span>(Absence_Corruption_Index, GDP_Per_Capita), <span class="at">.fns =</span> <span class="sc">~</span> <span class="fu">mean</span>(.x, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="fu">## About those Pesky NAs</span></span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>One thing we do want to acknowledge is the presence of NAs in our datasheet particularly in the corruption index.  There could be a multitude of reasons why this that data isn&#39;t present for a country in a particular year: data was lost, data was measured/calculated incorrectly, some disaster prevent the data from being collected, insufficient stability for determination to occur or the government doesn&#39;t want the public to know about their corruption therefore attempts to censor it.  All these factors some, randomized some not will be taken into our consideration when determining the relationship between corruption index and GDP per captia</span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## Possible Hypothesis </span></span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>We believe that a higher absence of corruption index will lead to a higher GDP per captia.  Traditionally are more stable and democratic forms of governments have higher standards of living,less internal/external conflicts, equal opportunities for all individuals and large amounts of well fares for their constituency.  They also in general have stronger economies that are more reliant to wild economic swings  For instance much of modern Europe has a high GDP per captia because of its modernization, democratic governments and tightintegration with the EU.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
