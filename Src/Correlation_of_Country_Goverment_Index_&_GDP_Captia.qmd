@@ -95,7 +95,7 @@ knitr::include_graphics(here::here("Figures", "ERDiagram.png"))
 |--|--|--|
 | 🔑Country | String | Full Name of a Country |
 | 🔑Year | Int | Year This data was collected
-| Country's Absence of Corruption Index | Optional(Int) | A index measuring how corrupt a perceived country's government is.  Lower value means less trust and more corruption.  NA means no data is unavailable for that year.  Please check the section about NA values for some possible reasons |
+| Country's Absence of Corruption Index | Optional(Double) | A index measuring how corrupt a perceived country's government is.  Lower value means less trust and more corruption.  NA means no data is unavailable for that year.  Please check the section about NA values for some possible reasons |
 | GDP Per Captia | Double | Calculated GDP per Captia (GDP/Population)
 
 ## Summary
