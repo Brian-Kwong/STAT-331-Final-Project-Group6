@@ -1,6 +1,6 @@
 ---
 title: "Correlation of Country Goverment Index & GDP Captia"
-author: "Brian Kwong,Connor Gamba,Joey Bailitz,Arneh Begi"
+author: "Brian Kwong, Connor Gamba, Joey Bailitz, Arneh Begi"
 format: 
   html:
     self-contained: true
@@ -30,6 +30,7 @@ Please make sure you have the following libraries installed:
   2. Here 
   3. Janitor 
   4. Styler 
+  5. Reactablefmtr
   
 
 ```{r}
@@ -41,12 +42,13 @@ remove(list = as.vector(ls()))
 library(tidyverse)
 library(janitor)
 library(styler)
+library(reactablefmtr)
 
 # Formats documents:
 style_file(path = here::here("Src", "Correlation_of_Country_Goverment_Index_&_GDP_Captia.qmd"), style = tidyverse_style, strict = TRUE)
 ```
-
-# Background 
+# Introduction
+## Background 
 
 The following data contains data collected on countries GDP and independent international calculation of a absence of corruption index from a variety of factors including government transparency, public official use of state dollars for personal gain and general trust in government officials being truthful in their actions between the years 1975 and 2021.  Higher absence corruption index signals ***lower*** perceived corruption.
 
@@ -77,8 +79,7 @@ curruption_data <- curruption_data |>
 
 gdp_per_cap_data <- gdp_per_cap_data |>
   pivot_longer(cols = c(x1975:x2021), names_to = "Year", values_to = "GDP_Per_Capita") |>
-  mutate(GDP_Per_Capita = str_replace_all(GDP_Per_Capita, "k", "000")) |>
-  mutate(GDP_Per_Capita = as.numeric(GDP_Per_Capita))
+  mutate(GDP_Per_Capita = if_else(str_detect(GDP_Per_Capita, "k$"), (as.numeric(str_remove_all(GDP_Per_Capita, "k$")) * 10000), as.numeric(GDP_Per_Capita)))
 ```
 
 
@@ -106,6 +107,15 @@ knitr::include_graphics(here::here("Figures", "ERDiagram.png"))
 
 ## Summary
 
+```{r} 
+#| output: False
+full_data |>
+  select(country) |>
+  summarise(Count = n_distinct(country))
+```
+
+There are a total of ***172*** countries in this study 
+
 Below is a quick summary of the average mean absense corruption Index and GDP per Captia out of every country for every year
 ```{r}
 full_data |>
@@ -118,4 +128,62 @@ full_data |>
 One thing we do want to acknowledge is the presence of NAs in our datasheet particularly in the corruption index.  There could be a multitude of reasons why this that data isn't present for a country in a particular year: data was lost, data was measured/calculated incorrectly, some disaster prevent the data from being collected, insufficient stability for determination to occur or the government doesn't want the public to know about their corruption therefore attempts to censor it.  All these factors some, randomized some not will be taken into our consideration when determining the relationship between corruption index and GDP per captia
 
 ## Possible Hypothesis 
-We believe that a higher absence of corruption index will lead to a higher GDP per captia.  Traditionally are more stable and democratic forms of governments have higher standards of living,less internal/external conflicts, equal opportunities for all individuals and large amounts of well fares for their constituency.  They also in general have stronger economies that are more reliant to wild economic swings  For instance much of modern Europe has a high GDP per captia because of its modernization, democratic governments and tightintegration with the EU.
+
+* Explanatory Variable : Absence of Curruption of Index
+* Response Variable : GDP Per Captia 
+
+We believe that a higher absence of corruption index will lead to a higher GDP per captia.  Traditionally are more stable and democratic forms of governments have higher standards of living,less internal/external conflicts, equal opportunities for all individuals and large amounts of well fares for their constituency.  They also in general have stronger economies that are more reliant to wild economic swings  For instance much of modern Europe has a high GDP per captia because of its modernization, democratic governments and tight integration with the EU.
+
+# Data Visualizations 
+
+```{r}
+# Renames the year from xYYYY -> YYYY
+full_data <- full_data |> mutate(Year = as.numeric(str_remove_all(Year, "^x")))
+```
+
+
+Below is a plot of countries and their respective Absence of Corruption Index vrs. GDP Per Captia in the year 2021
+
+```{r}
+full_data |>
+  filter(Year == 2021) |>
+  ggplot(mapping = aes(x = Absence_Corruption_Index, y = GDP_Per_Capita)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+
+As many of our countries have quite poor GDP-per-Captia they are all bunched up on the bottom making it quite hard to visualize.  We will therefore log transform our Y-axis to get a better view of this relationship
+```{r}
+# With Log Transformation
+full_data |>
+  filter(Year == 2021) |>
+  mutate(GDP_Per_Capita = log(GDP_Per_Capita)) |>
+  ggplot(mapping = aes(x = Absence_Corruption_Index, y = GDP_Per_Capita)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+# Data Modeling & Prediction
+## Creating our Regression Models 
+
+While the log transformation gives us a easier way to see the upwards trend between Absence of Corruption Index and the nation's GDP per Captia, it actually does ***NOT*** help our linear model, in fact comparing the computed R-squared values is ***worse*** on the log transformed model.
+
+```{r}
+# 2021 Data
+
+full_2021_data <- full_data |> filter(Year == 2021)
+
+# 2021 Data with log transformation
+
+log_2021_data <- full_2021_data |> mutate(GDP_Per_Capita = log(GDP_Per_Capita))
+```
+
+```{r}
+lm1 <- lm(GDP_Per_Capita ~ Absence_Corruption_Index, full_2021_data)
+lm2 <- lm(GDP_Per_Capita ~ Absence_Corruption_Index, log_2021_data)
+tibble("R Squared Non Transformed" = summary(lm1)$r.squared, "R Squared Log Transformed" = summary(lm2)$r.squared) |>
+  reactable() |>
+  add_title("Comparison of R Squared of Two Linear Models")
+```
+
