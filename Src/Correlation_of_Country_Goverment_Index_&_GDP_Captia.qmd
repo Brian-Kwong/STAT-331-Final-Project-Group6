@@ -320,12 +320,8 @@ library(av)
 
 ggplot(full_data, aes(x = Absence_Corruption_Index, y = GDP_Per_Capita, color = country)) +
   geom_point(alpha = 0.7, show.legend = FALSE) +
-  scale_size(range = c(2, 12)) +
-  scale_x_log10() +
-  # facet_wrap(~continent) +
-  # Here comes the gganimate specific bits
-  labs(title = "Year: {frame_time}", x = "GDP per capita", y = "life expectancy") +
+   facet_wrap(~region) +
   transition_time(year) +
-  ease_aes("linear")
+  ease_aes("linear")'
 ```
 
