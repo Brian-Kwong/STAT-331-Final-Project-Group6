@@ -7,6 +7,7 @@ format:
     code-tools: true
     toc: true
     theme: Minty
+    df-print: kable
 editor: source
 code-fold: true
 execute: 
@@ -35,6 +36,10 @@ Please make sure you have the following libraries installed:
 
 ```{r}
 #| output: False
+
+# Set output scope
+options(scipen = 0)
+
 # Clears environment
 remove(list = as.vector(ls()))
 
@@ -73,6 +78,7 @@ gdp_per_cap_data <- gdp_per_cap_data |> select(country, c(x1975:x2021))
 ## Piviot Data to Long Format
 
 ```{r}
+#| warning: false
 curruption_data <- curruption_data |>
   pivot_longer(cols = c(x1975:x2021), names_to = "Year", values_to = "Absence_Corruption_Index") |>
   mutate(Absence_Corruption_Index = as.numeric(Absence_Corruption_Index))
@@ -122,7 +128,11 @@ full_data |>
   group_by(country) |>
   mutate(across(.cols = c(Absence_Corruption_Index, GDP_Per_Capita), .fns = ~ mean(.x, na.rm = TRUE))) |>
   group_by(Year) |>
-  summary(across(.cols = c(Absence_Corruption_Index, GDP_Per_Capita), .fns = ~ mean(.x, na.rm = TRUE)))
+  summary(across(.cols = c(Absence_Corruption_Index, GDP_Per_Capita), .fns = ~ mean(.x, na.rm = TRUE))) |>
+  unclass() |>
+  as_tibble() |>
+  select(Absence_Corruption_Index, GDP_Per_Capita) |>
+  rename("Absence Corruption Index" = Absence_Corruption_Index, " GDP Per Capita" = GDP_Per_Capita)
 ```
 ## About those Pesky NAs
 One thing we do want to acknowledge is the presence of NAs in our datasheet particularly in the corruption index.  There could be a multitude of reasons why this that data isn't present for a country in a particular year: data was lost, data was measured/calculated incorrectly, some disaster prevent the data from being collected, insufficient stability for determination to occur or the government doesn't want the public to know about their corruption therefore attempts to censor it.  All these factors some, randomized some not will be taken into our consideration when determining the relationship between corruption index and GDP per captia
@@ -180,10 +190,63 @@ log_2021_data <- full_2021_data |> mutate(GDP_Per_Capita = log(GDP_Per_Capita))
 ```
 
 ```{r}
-lm1 <- lm(GDP_Per_Capita ~ Absence_Corruption_Index, full_2021_data)
-lm2 <- lm(GDP_Per_Capita ~ Absence_Corruption_Index, log_2021_data)
-tibble("R Squared Non Transformed" = summary(lm1)$r.squared, "R Squared Log Transformed" = summary(lm2)$r.squared) |>
+full_2021_data_lm <- lm(GDP_Per_Capita ~ Absence_Corruption_Index, full_2021_data)
+log_2021_data_lm <- lm(GDP_Per_Capita ~ Absence_Corruption_Index, log_2021_data)
+tibble("R Squared Non Transformed" = summary(full_2021_data_lm)$r.squared, "R Squared Log Transformed" = summary(log_2021_data_lm)$r.squared) |>
   reactable() |>
-  add_title("Comparison of R Squared of Two Linear Models")
+  add_title("Comparison of R Squared of Two Linear Models", font_size = 20, align = "center")
+```
+With that in mind, we will be sticking with our untransformed data for the remainder of this exploration.
+
+```{r}
+# Removes the transformed log models
+remove(log_2021_data, log_2021_data_lm)
+
+# Summary of Linear Model :
+broom::tidy(full_2021_data_lm) |>
+  rename("Regression Variable" = term, "Model Estimate" = estimate, "Standard Error" = std.error) |>
+  select(c("Regression Variable":"Standard Error"))
+```
+Our linear model comparing different countries in 2021 and their respective Absence of Corruption Index vrs their 2021 GDP Per Captia yeilds us the following results
+
+$$
+\beta_0 = -199747.304\\
+\beta_1 = 8211.695
+$$
+which will give us the linear regression formula of :
+$$
+\hat{y} = -199747.304+8211.695x
+$$
+
+or rewritten with our explanatory and response variables
+$$
+\hat{GDP\_Per\_Captia} = -199747.304+8211.695(Absence\_Corruption\_Index)
+$$
+
+## Analysis 
+
+With a $R^2$ value of 0.50510 approximately 50% of our observed GDP per Captia variability is accounted for in our correlation that for every score increase of 1 for a country's Absence of Corruption Index their GDP per Captia will increase $8211.66.
+
+## Checking the Linear Model's Accuracy 
+Although we have a mild $R^2$ relation between Absence of Corruption Index and its response variable GDP per Captia, we want to still check the model fit. One way to check the average residual of our model
+
+```{r}
+full_2021_data_lm_resd <- full_2021_data_lm |>
+  broom::augment() |>
+  select(.resid)
+full_2021_data_lm_resd |>
+  summarize("Avergae Residual" = mean(.resid)) |>
+  reactable() |>
+  add_title("Model Residual Stats", font_size = 20, align = "center")
+```
+With a average residual $ < |10^{-9}|$ this looks pretty promising, but to confirm our calculations and better visualize the distributions of residuals lets plot them on a histogram.  What we expect is a normal distribution of all residuals reminiscent of the fimilar bell curve.
+
+```{r}
+options(scipen = 100)
+full_2021_data_lm_resd |> ggplot(mapping = aes(x = .resid)) +
+  geom_histogram(aes(y = ..density..), bins = 50) +
+  labs(x = "Residuals", y = "Percentage of Distrubution") +
+  geom_density(colour = "steelblue") +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
 ```
 
