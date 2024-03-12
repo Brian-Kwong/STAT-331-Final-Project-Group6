@@ -18,21 +18,21 @@ execute:
 ---
 
 ## Names:
-  * Brian Kwong
-  * Connor Gamba
-  * Joey Bailitz
-  * Arneh Begi
+
+-   Brian Kwong
+-   Connor Gamba
+-   Joey Bailitz
+-   Arneh Begi
 
 ## Import the Needed Libraries
 
 Please make sure you have the following libraries installed:
 
-  1. Tidyverse
-  2. Here 
-  3. Janitor 
-  4. Styler 
-  5. Reactablefmtr
-  
+1.  Tidyverse
+2.  Here
+3.  Janitor
+4.  Styler
+5.  Reactablefmtr
 
 ```{r}
 #| output: False
@@ -52,12 +52,15 @@ library(reactablefmtr)
 # Formats documents:
 style_file(path = here::here("Src", "Correlation_of_Country_Goverment_Index_&_GDP_Captia.qmd"), style = tidyverse_style, strict = TRUE)
 ```
-# Introduction
-## Background 
 
-The following data contains data collected on countries GDP and independent international calculation of a absence of corruption index from a variety of factors including government transparency, public official use of state dollars for personal gain and general trust in government officials being truthful in their actions between the years 1975 and 2021.  Higher absence corruption index signals ***lower*** perceived corruption.
+# Introduction
+
+## Background
+
+The following data contains data collected on countries GDP and independent international calculation of a absence of corruption index from a variety of factors including government transparency, public official use of state dollars for personal gain and general trust in government officials being truthful in their actions between the years 1975 and 2021. Higher absence corruption index signals ***lower*** perceived corruption.
 
 # Our Data
+
 ## Importing the Data
 
 ```{r}
@@ -66,14 +69,13 @@ curruption_data <- read_csv(here::here("Datasets", "abscorrup_idea.csv"), show_c
 gdp_per_cap_data <- read_csv(here::here("Datasets", "gdp_pcap.csv"), show_col_types = FALSE) |> janitor::clean_names()
 ```
 
-
 ## Matching Our Daaset
-Since our corruption only has data for years between [1975,2021] we filter our GDP per captia to those years too
+
+Since our corruption only has data for years between \[1975,2021\] we filter our GDP per captia to those years too
 
 ```{r}
 gdp_per_cap_data <- gdp_per_cap_data |> select(country, c(x1975:x2021))
 ```
-
 
 ## Piviot Data to Long Format
 
@@ -87,7 +89,6 @@ gdp_per_cap_data <- gdp_per_cap_data |>
   pivot_longer(cols = c(x1975:x2021), names_to = "Year", values_to = "GDP_Per_Capita") |>
   mutate(GDP_Per_Capita = if_else(str_detect(GDP_Per_Capita, "k$"), (as.numeric(str_remove_all(GDP_Per_Capita, "k$")) * 10000), as.numeric(GDP_Per_Capita)))
 ```
-
 
 ## Data Joins
 
@@ -104,25 +105,31 @@ The following ER diagram represents how our data is structured
 knitr::include_graphics(here::here("Figures", "ERDiagram.png"))
 ```
 
-| Variable | Type | Description |
-|--|--|--|
-| 🔑Country | String | Full Name of a Country |
-| 🔑Year | Int | Year This data was collected
-| Country's Absence of Corruption Index | Optional(Double) | A index measuring how corrupt a perceived country's government is.  Lower value means less trust and more corruption.  NA means no data is unavailable for that year.  Please check the section about NA values for some possible reasons |
-| GDP Per Captia | Double | Calculated GDP per Captia (GDP/Population)
+| Variable                              | Type             | Description                                                                                                                                                                                                                            |
+|------------------------|------------------------|------------------------|
+| 🔑Country                             | String           | Full Name of a Country                                                                                                                                                                                                                 |
+| 🔑Year                                | Int              | Year This data was collected                                                                                                                                                                                                           |
+| Country's Absence of Corruption Index | Optional(Double) | A index measuring how corrupt a perceived country's government is. Lower value means less trust and more corruption. NA means no data is unavailable for that year. Please check the section about NA values for some possible reasons |
+| GDP Per Captia                        | Double           | Calculated GDP per Captia (GDP/Population)                                                                                                                                                                                             |
+
+Descriptions of Variables
+
+The two quantitative variables our team have decided to focus on are GDP per Capita (GDP/Population) and Absence of Corruption as an indexed range. These variables are measured for all 172 countries. Below are the descriptions of each and what they represent, specifically in our data set: GDP per Capita (GDP/Population): This variable represents a countries GDP or Gross Domestic Product for a given year divided by the countries population size. In other words, this variable is simply the per-person GDP for that country. Absence of Corruption Index: This variable represents the lack of corruption within a countries public administration. This indicator is determined by assessing public sector corrupt exchanges, public sector theft, executive embezzlement and theft, executive bribery and corrupt exchanges. These values are determined by assessing the extent that public officials within an office administration do not use their power for personal benefit or gain. The scaling of this index is such that a lower value represent a higher absence of corruption, or simply put less corruption. Conversely, a high value for this variable represents a lower absence of corruption, or simply put, more corruption. The categorical variable Country refers to the country that is being observed or referred to when assessing the corresponding values for GDP per Capita and Absence of Corruption. The quantitative variable Year, refers to the given year that corresponds to the other variables observations. Year refers to data collected from January to December for the given year.
+
 
 ## Summary
 
-```{r} 
+```{r}
 #| output: False
 full_data |>
   select(country) |>
   summarise(Count = n_distinct(country))
 ```
 
-There are a total of ***172*** countries in this study 
+There are a total of ***172*** countries in this study
 
 Below is a quick summary of the average mean absense corruption Index and GDP per Captia out of every country for every year
+
 ```{r}
 full_data |>
   group_by(country) |>
@@ -134,23 +141,24 @@ full_data |>
   select(Absence_Corruption_Index, GDP_Per_Capita) |>
   rename("Absence Corruption Index" = Absence_Corruption_Index, " GDP Per Capita" = GDP_Per_Capita)
 ```
+
 ## About those Pesky NAs
-One thing we do want to acknowledge is the presence of NAs in our datasheet particularly in the corruption index.  There could be a multitude of reasons why this that data isn't present for a country in a particular year: data was lost, data was measured/calculated incorrectly, some disaster prevent the data from being collected, insufficient stability for determination to occur or the government doesn't want the public to know about their corruption therefore attempts to censor it.  All these factors some, randomized some not will be taken into our consideration when determining the relationship between corruption index and GDP per captia
 
-## Possible Hypothesis 
+One thing we do want to acknowledge is the presence of NAs in our datasheet particularly in the corruption index. There could be a multitude of reasons why this that data isn't present for a country in a particular year: data was lost, data was measured/calculated incorrectly, some disaster prevent the data from being collected, insufficient stability for determination to occur or the government doesn't want the public to know about their corruption therefore attempts to censor it. All these factors some, randomized some not will be taken into our consideration when determining the relationship between corruption index and GDP per captia
 
-* Explanatory Variable : Absence of Curruption of Index
-* Response Variable : GDP Per Captia 
+## Possible Hypothesis
 
-We believe that a higher absence of corruption index will lead to a higher GDP per captia.  Traditionally are more stable and democratic forms of governments have higher standards of living,less internal/external conflicts, equal opportunities for all individuals and large amounts of well fares for their constituency.  They also in general have stronger economies that are more reliant to wild economic swings  For instance much of modern Europe has a high GDP per captia because of its modernization, democratic governments and tight integration with the EU.
+-   Explanatory Variable : Absence of Curruption of Index
+-   Response Variable : GDP Per Captia
 
-# Data Visualizations 
+We believe that a higher absence of corruption index will lead to a higher GDP per captia. Traditionally are more stable and democratic forms of governments have higher standards of living,less internal/external conflicts, equal opportunities for all individuals and large amounts of well fares for their constituency. They also in general have stronger economies that are more reliant to wild economic swings For instance much of modern Europe has a high GDP per captia because of its modernization, democratic governments and tight integration with the EU.
+
+# Data Visualizations
 
 ```{r}
 # Renames the year from xYYYY -> YYYY
 full_data <- full_data |> mutate(Year = as.numeric(str_remove_all(Year, "^x")))
 ```
-
 
 Below is a plot of countries and their respective Absence of Corruption Index vrs. GDP Per Captia in the year 2021
 
@@ -162,8 +170,8 @@ full_data |>
   geom_smooth(method = "lm")
 ```
 
+As many of our countries have quite poor GDP-per-Captia they are all bunched up on the bottom making it quite hard to visualize. We will therefore log transform our Y-axis to get a better view of this relationship
 
-As many of our countries have quite poor GDP-per-Captia they are all bunched up on the bottom making it quite hard to visualize.  We will therefore log transform our Y-axis to get a better view of this relationship
 ```{r}
 # With Log Transformation
 full_data |>
@@ -175,7 +183,8 @@ full_data |>
 ```
 
 # Data Modeling & Prediction
-## Creating our Regression Models 
+
+## Creating our Regression Models
 
 While the log transformation gives us a easier way to see the upwards trend between Absence of Corruption Index and the nation's GDP per Captia, it actually does ***NOT*** help our linear model, in fact comparing the computed R-squared values is ***worse*** on the log transformed model.
 
@@ -196,6 +205,7 @@ tibble("R Squared Non Transformed" = summary(full_2021_data_lm)$r.squared, "R Sq
   reactable() |>
   add_title("Comparison of R Squared of Two Linear Models", font_size = 20, align = "center")
 ```
+
 With that in mind, we will be sticking with our untransformed data for the remainder of this exploration.
 
 ```{r}
@@ -207,27 +217,26 @@ broom::tidy(full_2021_data_lm) |>
   rename("Regression Variable" = term, "Model Estimate" = estimate, "Standard Error" = std.error) |>
   select(c("Regression Variable":"Standard Error"))
 ```
+
 Our linear model comparing different countries in 2021 and their respective Absence of Corruption Index vrs their 2021 GDP Per Captia yeilds us the following results
 
 $$
 \beta_0 = -199747.304\\
 \beta_1 = 8211.695
-$$
-which will give us the linear regression formula of :
-$$
+$$ which will give us the linear regression formula of : $$
 \hat{y} = -199747.304+8211.695x
 $$
 
-or rewritten with our explanatory and response variables
-$$
+or rewritten with our explanatory and response variables $$
 \hat{GDP\_Per\_Captia} = -199747.304+8211.695(Absence\_Corruption\_Index)
 $$
 
-## Analysis 
+## Analysis
 
-With a $R^2$ value of 0.50510 approximately 50% of our observed GDP per Captia variability is accounted for in our correlation that for every score increase of 1 for a country's Absence of Corruption Index their GDP per Captia will increase $8211.66.
+With a $R^2$ value of 0.50510 approximately 50% of our observed GDP per Captia variability is accounted for in our correlation that for every score increase of 1 for a country's Absence of Corruption Index their GDP per Captia will increase \$8211.66.
 
-## Checking the Linear Model's Accuracy 
+## Checking the Linear Model's Accuracy
+
 Although we have a mild $R^2$ relation between Absence of Corruption Index and its response variable GDP per Captia, we want to still check the model fit. One way to check the average residual of our model
 
 ```{r}
@@ -240,7 +249,7 @@ full_2021_data_lm_resd |>
   add_title("Model Residual Stats", font_size = 20, align = "center")
 ```
 
-With a average residual $<|10^{-9}|$ this looks pretty promising, but to confirm our calculations and better visualize the distributions of residuals lets plot them on a histogram.  What we expect is a normal distribution of all residuals reminiscent of the familiar bell curve.
+With a average residual $<|10^{-9}|$ this looks pretty promising, but to confirm our calculations and better visualize the distributions of residuals lets plot them on a histogram. What we expect is a normal distribution of all residuals reminiscent of the familiar bell curve.
 
 ```{r}
 options(scipen = 100)
@@ -250,4 +259,3 @@ full_2021_data_lm_resd |> ggplot(mapping = aes(x = .resid)) +
   geom_density(colour = "steelblue") +
   theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
 ```
-
