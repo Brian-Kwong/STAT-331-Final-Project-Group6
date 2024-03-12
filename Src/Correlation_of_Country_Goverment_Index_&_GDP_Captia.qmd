@@ -239,7 +239,8 @@ full_2021_data_lm_resd |>
   reactable() |>
   add_title("Model Residual Stats", font_size = 20, align = "center")
 ```
-With a average residual $ < |10^{-9}|$ this looks pretty promising, but to confirm our calculations and better visualize the distributions of residuals lets plot them on a histogram.  What we expect is a normal distribution of all residuals reminiscent of the fimilar bell curve.
+
+With a average residual $<|10^{-9}|$ this looks pretty promising, but to confirm our calculations and better visualize the distributions of residuals lets plot them on a histogram.  What we expect is a normal distribution of all residuals reminiscent of the fimilar bell curve.
 
 ```{r}
 options(scipen = 100)
