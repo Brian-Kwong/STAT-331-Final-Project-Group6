@@ -48,6 +48,9 @@ library(tidyverse)
 library(janitor)
 library(styler)
 library(reactablefmtr)
+library(gganimate)
+library(gapminder)
+library(gifski)
 
 # Formats documents:
 style_file(path = here::here("Src", "Correlation_of_Country_Goverment_Index_&_GDP_Captia.qmd"), style = tidyverse_style, strict = TRUE)
@@ -186,7 +189,7 @@ full_data |>
   group_by(country) |>
   mutate(across(.cols = c(Absence_Corruption_Index, GDP_Per_Capita), .fns = ~ mean(.x, na.rm = TRUE))) |>
   group_by(Year) |>
-  summary(across(.cols = c(Absence_Corruption_Index, GDP_Per_Capita), .fns = ~ mean(.x, na.rm = TRUE))) |>
+  summary() |>
   unclass() |>
   as_tibble() |>
   select(Absence_Corruption_Index, GDP_Per_Capita) |>
