@@ -18,13 +18,6 @@ execute:
 bibliography: references.bib
 ---
 
-## Names:
-
--   Brian Kwong
--   Connor Gamba
--   Joey Bailitz
--   Arneh Begi
-
 ## Import the Needed Libraries
 
 Please make sure you have the following libraries installed:
