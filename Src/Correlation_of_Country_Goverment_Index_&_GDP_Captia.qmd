@@ -410,6 +410,7 @@ sim_model_res |>
   theme(axis.title.y = element_text(angle = 0, vjust = 0.5), plot.title = element_text(hjust = 0.5))
 ```
 
+<<<<<<< Updated upstream
 
 ```{r}
 # Histogram of gpd-per capita by countries with N/A value for Corruption Index Value
@@ -429,3 +430,9 @@ ggplot(na_data, aes(x = GDP_Per_Capita)) +
   theme(axis.title.y = element_text(angle = 0, vjust = 0.5), plot.title = element_text(hjust = 0.5))
 ```
 The above histogram depicts the distribution of GPD's Per Capita amongst countries that have missing values (N/A) for the absence of corruption index. This histogram includes all years from the original data set, 1975-2021, and all countries from this grouping are included, to better depict the distribution. The graph shows that there is a very large amount of countries, around 120, that have very low GDP's per capita (around the several thousand dollars range) and do not contain values for absence of corruption. Aside from this, there appears to be a slightly right-skewed distribution centered at about 150,000, containing the remainder of the data from our sub-set group. Additionally, the max of this right tail hovers around 280,000. 
+
+```{r}
+# Variance Table for Observed, fitted and residual 
+full_2021_data_lm |> broom::augment() |> select(GDP_Per_Capita,.fitted,.resid) |> summarise(across(.cols = c(GDP_Per_Capita,.fitted,.resid), .fns =~var(x = .x))) |> rename("Observed" = GDP_Per_Capita,"Fitted" = .fitted,"Residual" = .resid) |> reactable() |>
+  add_title("Model Variance Stats", font_size = 20, align = "center")
+```
