@@ -206,7 +206,7 @@ One thing we do want to acknowledge is the presence of NAs in our datasheet, par
 -   Explanatory Variable : Absence of Corruption of Index
 -   Response Variable : GDP Per Capita
 
-We believe that a higher absence of corruption index will lead to a higher GDP per capita. Traditionally, our more stable and democratic forms of governments have higher standards of living, less internal and or external conflicts, equal opportunities for all individuals, and large amounts of wellfares for their constituency. Furthermore, in general, they have stronger economies that are more reliant to wild economic swings. For instance much of modern Europe has a high GDP per capita because of its modernization, democratic governments and tight integration with the EU.
+We believe that a higher absence of corruption index will lead to a higher GDP per capita. Traditionally, our more stable and democratic forms of governments have higher standards of living, less internal and or external conflicts, equal opportunities for all individuals, and large amounts of well fares for their constituency. Furthermore, in general, they have stronger economies that are more reliant to wild economic swings. For instance much of modern Europe has a high GDP per capita because of its modernization, democratic governments and tight integration with the EU.
 
 # Data Visualizations
 
@@ -217,7 +217,7 @@ full_data <- full_data |> mutate(Year = as.numeric(str_remove_all(Year, "^x")))
 
 ## 2021 Absence Of Corruption vs GDP per Capita
 
-Below is a plot of countries and their respective Absence of Corruption Index vs. GDP Per Capita in the year 2021
+Below is a plot of countries and their respective Absence of Corruption Index vs. GDP Per Capita in the year 2021. At this point, we note that all of the plots from this point use 2021 as the year. This particular year is our basis, since it is has no NA values and is balanced. Furthermore, it is a recent year, fairly representative of  the current times.
 
 ```{r}
 full_data |>
