@@ -229,9 +229,9 @@ full_data |>
   theme(axis.title.y = element_text(vjust = 0.5, angle = 0), plot.title = element_text(hjust = 0.5))
 ```
 
-## Log Transformed 2021 Absence Of Corruption vs GDP per Capita
+	The scatterplot and fit line definitely indicate that there is a positive relationship between our variables. Aside from four high outliers, each data point lies relatively close to the fit line. The part that stands out the most is the amount of observations that are bunched up on the x-axis at 0. Many countries in our dataset only have a GDP per Capita in the hundreds or low thousands, so due to how the plot is scaled, they all appear on the same horizontal line. Because of this, we will try a log transformation so these observations are more visible.
 
-As many of our countries have quite poor GDP's per capita, they are all bunched up on the bottom. This makes visualization quite difficult. Therefore, we will log transform our Y-axis to get a better view of this relationship
+## Log Transformed 2021 Absence Of Corruption vs GDP per Capita
 
 ```{r}
 # With Log Transformation
@@ -245,7 +245,7 @@ full_data |>
   theme(axis.title.y = element_text(vjust = 0.5, angle = 0), plot.title = element_text(hjust = 0.5))
 ```
 
-It looks like our original hypothesis seems to have at least some grounds. Lets see if such a trend has been present for the past 50 years (the extent in which we have data for absence of corruption index) or if this is just a trend that matriculated recently.
+	The log transformation succeeded in its goal of breaking up the lower GDP per Capita observations. However, it is likely that the strength of our model was decreased. It seems that after the log transformation, the observations broke into two “pools” separated by GDP per Capita. So while there are no outliers on this axis, the vast majority of observations in the lower pool fall below the regression line, and in the higher pool, most observations are above it. But the positive relationship remains, and now we would like to see if it has changed at all in the last 50 years across different regions in the world, or if this as always been the case.
 
 ## History of Absence Of Corruption vs GDP per Capita
 
@@ -270,7 +270,10 @@ full_data |>
   ease_aes("linear")
 ```
 
-The trend holds! However, only a true regression will tell us if there really is a correlation and how strong it may be.
+	In this animation, we can see the observations and fit line for each year separated by region, with each color representing one country across time. Starting in Europe, we can see a steady rise in GDP per Capita across countries with higher Absence of Corruption over the years, leading to a steeper, or more positive, relationship in recent years. Europe is also home Monaco, a country with a GDP per Capita of over 2 million, and the only country that is not visible across the graphs. The Americas produces an interesting time-lapse because most countries don’t change significantly in GDP per Capita, they slowly become less corrupt, which makes the relationship more positive. The two high outliers in this region are the USA in pink and Canada in yellow, and while they both gradually rise in GDP per Capita, the USA experiences a drop in Absence in Corruption in the late 2010s. 
+	The African plot is the only plot to display a negative relationship at any point, which is likely because the vast majority of countries in this region have extremely low GDP per Capita, so a country with any value on the x-axis can influence the line with a spike in GDP per Capita. In particular, the countries Gabon and Libya had the highest GDP per Capita in the 1980s, despite having Absence of Corruption values in the 20’s, so they heavily increased the trend and turned it negative. But the trend in Africa eventually becomes positive. Finally, the Asia-Pacific region has features similar to all 3 other plots, with many countries close to the x-axis as well as countries with high Absence of Corruption values increasing in GDP per Capita over time. The most interesting feature here is three countries with mediocre values in Absence of Corruption having high GDP per Capita near the beginning, and they fluctuate intensely across the years. These three countries are Qatar, the UAE, and Kuwait. While this happens, Singapore, a country with high Absence of Corruption, rises to the top of the continent, making the trend more positive. 
+
+With this animation, we have strong reason to believe our original hypothesis. So now we will test the correlation with regression.
 
 # Data Modeling & Prediction
 
