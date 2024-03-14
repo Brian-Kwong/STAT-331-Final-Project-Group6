@@ -348,6 +348,63 @@ full_2021_data_lm_resd |> ggplot(mapping = aes(x = .resid)) +
   labs(x = "Residuals", y = "Percentage of Distrubution") +
   geom_density(colour = "steelblue") +
   theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+options(scipen = 0)
 ```
 
 \`
+
+## Simulations and Model
+
+```{r}
+observed_2021_data <- full_2021_data |>
+  select(GDP_Per_Capita) |>
+  mutate(GDP_Per_Capita = as.numeric(GDP_Per_Capita)) |>
+  pull()
+predicted_2021_data <- full_2021_data_lm |> predict()
+```
+
+
+```{r}
+generateRealisticPredictions <- function(predictedValues, standardError) {
+  mutatedPredictedValues <- predictedValues + rnorm(length(predictedValues), 0, standardError)
+  return(mutatedPredictedValues)
+}
+
+findModelFit <- function(linearModel) {
+  newPredicted <- linearModel |> broom::augment()
+  newPredicted <- newPredicted |>
+    select(GDP_Per_Capita, .fitted) |>
+    mutate(.fitted = generateRealisticPredictions(.fitted, sigma(linearModel)))
+  observedPredictedLm <- lm(GDP_Per_Capita ~ .fitted, newPredicted)
+  return(broom::glance(observedPredictedLm) |> select(r.squared) |> pull())
+}
+```
+
+```{r}
+set.seed(05081995)
+sim_model_res <- map_dbl(.x = c(1:5000), .f = ~ findModelFit(full_2021_data_lm))
+summary(sim_model_res) |>
+  unclass() |>
+  as.list() |>
+  as.data.frame() |>
+  pivot_longer(cols = c("Min.":"Max."), names_to = "Stat", values_to = "Values") |>
+  mutate(Stat = str_remove(Stat, "[X]")) |>
+  mutate(Stat = str_replace(Stat, "\\.", " ")) |>
+  reactable() |>
+  add_title("Model Residual Simulations Stats", font_size = 20, align = "center")
+```
+Plotting the $R^2$ on a histogram we get 
+
+```{r,fig.width=9}
+options(scipen = 100)
+sim_model_res |>
+  as.data.frame() |>
+  ggplot(mapping = aes(x = sim_model_res)) +
+  geom_histogram(aes(y = after_stat(density)), bins = 50) +
+  ggtitle(bquote("Distrubution of " ~ R^2 ~ "between Normalized Simulated Data and Observed Data")) +
+  labs(x = bquote(R^2), y = "Percentage of\n Distrubution") +
+  geom_density(colour = "steelblue") +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5), plot.title = element_text(hjust = 0.5))
+```
+
+
