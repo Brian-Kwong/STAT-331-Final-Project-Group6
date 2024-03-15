@@ -1,6 +1,7 @@
 ---
 title: "Correlation of Country, Government, Index & GDP Per Capita"
 author: "Brian Kwong, Connor Gamba, Joey Bailitz, Arneh Begi"
+engine: knitr
 format: 
   html:
     self-contained: true
@@ -46,6 +47,7 @@ library(styler)
 library(reactablefmtr)
 library(gganimate)
 library(gifski)
+library(formattable)
 
 # Formats documents:
 style_file(path = here::here("Src", "Correlation_of_Country_Goverment_Index_&_GDP_Captia.qmd"), style = tidyverse_style, strict = TRUE)
@@ -166,7 +168,7 @@ knitr::include_graphics(here::here("Figures", "ERDiagram.png"))
 | 🔑Country | String | Full Name of a Country |
 | 🔑Year | Int | Year This data was collected
 | Country's Absence of Corruption Index | Optional(Double) | A index measuring how corrupt a perceived country's government is.  Lower value means less trust and more corruption.  NA means no data is unavailable for that year.  Please check the section about NA values for some possible reasons |
-| GDP Per Captia | Double | Calculated GDP per Captia (GDP/Population)
+| GDP Per Captia | Double | Calculated GDP per Captia (GDP/Population) in USD
 
 
 The two quantitative variables our team have decided to focus on are GDP per Capita (GDP/Population) and Absence of Corruption as an indexed range. These variables are measured for all 172 countries. Below are the descriptions of each and what they represent, specifically in our data set: GDP per Capita (GDP/Population): This variable represents a countries GDP or Gross Domestic Product for a given year divided by the countries population size. In other words, this variable is simply the per-person GDP for that [@ingabire_2020_gapminder] country.Absence of Corruption Index: This variable represents the lack of corruption within a countries public administration.[@gapminder_2023__ideademocracy] This indicator is determined by assessing public sector corrupt exchanges, public sector theft, executive embezzlement and theft, executive bribery and corrupt exchanges. These values are determined by assessing the extent that public officials within an office administration do not use their power for personal benefit or gain. The scaling of this index is such that a lower value represent a higher absence of corruption, or simply put less corruption. Conversely, a high value for this variable represents a lower absence of corruption, or simply put, more corruption. The categorical variable Country refers to the country that is being observed or referred to when assessing the corresponding values for GDP per Capita and Absence of Corruption. The quantitative variable Year, refers to the given year that corresponds to the other variables observations. Year refers to data collected from January to December for the given year.
@@ -194,7 +196,8 @@ full_data |>
   as_tibble() |>
   select(Absence_Corruption_Index, GDP_Per_Capita) |>
   drop_na() |>
-  rename("Absence Corruption Index" = Absence_Corruption_Index, " GDP Per Capita" = GDP_Per_Capita)
+  rename("Absence Corruption Index" = Absence_Corruption_Index, " GDP Per Capita (USD)" = GDP_Per_Capita) |>
+  mutate_all(.funs = ~ prettyNum(.x, ","))
 ```
 
 ## About those Pesky NAs
@@ -215,37 +218,6 @@ We believe that a higher absence of corruption index will lead to a higher GDP p
 full_data <- full_data |> mutate(Year = as.numeric(str_remove_all(Year, "^x")))
 ```
 
-## 2021 Absence Of Corruption vs GDP per Capita
-
-Below is a plot of countries and their respective Absence of Corruption Index vs. GDP Per Capita in the year 2021. At this point, we note that all of the plots from this point use 2021 as the year. This particular year is our basis, since it is has no NA values and is balanced. Furthermore, it is a recent year, fairly representative of  the current times.
-
-```{r}
-full_data |>
-  filter(Year == 2021) |>
-  ggplot(mapping = aes(x = Absence_Corruption_Index, y = GDP_Per_Capita)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  labs(title = "Absence of Corruption vs GDP per Capita 2021", x = "Absence of Corruption", y = "GDP per Capita") +
-  theme(axis.title.y = element_text(vjust = 0.5, angle = 0), plot.title = element_text(hjust = 0.5))
-```
-
-	The scatterplot and fit line definitely indicate that there is a positive relationship between our variables. Aside from four high outliers, each data point lies relatively close to the fit line. The part that stands out the most is the amount of observations that are bunched up on the x-axis at 0. Many countries in our dataset only have a GDP per Capita in the hundreds or low thousands, so due to how the plot is scaled, they all appear on the same horizontal line. Because of this, we will try a log transformation so these observations are more visible.
-
-## Log Transformed 2021 Absence Of Corruption vs GDP per Capita
-
-```{r}
-# With Log Transformation
-full_data |>
-  filter(Year == 2021) |>
-  mutate(GDP_Per_Capita = log(GDP_Per_Capita)) |>
-  ggplot(mapping = aes(x = Absence_Corruption_Index, y = GDP_Per_Capita)) +
-  geom_point() +
-  geom_smooth(method = "lm") +
-  labs(title = "Absence of Corruption vs GDP per Capita(Log Transformed)\n 2021", x = "Absence of Corruption", y = "Log of GDP per Capita") +
-  theme(axis.title.y = element_text(vjust = 0.5, angle = 0), plot.title = element_text(hjust = 0.5))
-```
-
-	The log transformation succeeded in its goal of breaking up the lower GDP per Capita observations. However, it is likely that the strength of our model was decreased. It seems that after the log transformation, the observations broke into two “pools” separated by GDP per Capita. So while there are no outliers on this axis, the vast majority of observations in the lower pool fall below the regression line, and in the higher pool, most observations are above it. But the positive relationship remains, and now we would like to see if it has changed at all in the last 50 years across different regions in the world, or if this as always been the case.
 
 ## History of Absence Of Corruption vs GDP per Capita
 
@@ -263,17 +235,56 @@ full_data |>
   # Makes a regression line for easier viewing
   geom_smooth(mapping = aes(x = Absence_Corruption_Index, y = GDP_Per_Capita, color = "blue"), method = "lm", se = FALSE) +
   # Tittle stuff
-  labs(title = "Absence of Corruption vs GDP per Capita", subtitle = "Year: {frame_time}", x = "Absence of Corruption", y = "GDP Per Capita") +
+  labs(title = "Absence of Corruption vs GDP per Capita", subtitle = "Year: {frame_time}", x = "Absence of Corruption", y = "GDP Per Capita (USD)") +
   theme(axis.title.y = element_text(vjust = 0.5, angle = 0), plot.title = element_text(hjust = 0.5), plot.subtitle = element_text(hjust = 0.5)) +
+  scale_y_continuous(labels = comma) +
   # Animating by year
   transition_time(as.integer(Year)) +
   ease_aes("linear")
 ```
 
-	In this animation, we can see the observations and fit line for each year separated by region, with each color representing one country across time. Starting in Europe, we can see a steady rise in GDP per Capita across countries with higher Absence of Corruption over the years, leading to a steeper, or more positive, relationship in recent years. Europe is also home Monaco, a country with a GDP per Capita of over 2 million, and the only country that is not visible across the graphs. The Americas produces an interesting time-lapse because most countries don’t change significantly in GDP per Capita, they slowly become less corrupt, which makes the relationship more positive. The two high outliers in this region are the USA in pink and Canada in yellow, and while they both gradually rise in GDP per Capita, the USA experiences a drop in Absence in Corruption in the late 2010s. 
-	The African plot is the only plot to display a negative relationship at any point, which is likely because the vast majority of countries in this region have extremely low GDP per Capita, so a country with any value on the x-axis can influence the line with a spike in GDP per Capita. In particular, the countries Gabon and Libya had the highest GDP per Capita in the 1980s, despite having Absence of Corruption values in the 20’s, so they heavily increased the trend and turned it negative. But the trend in Africa eventually becomes positive. Finally, the Asia-Pacific region has features similar to all 3 other plots, with many countries close to the x-axis as well as countries with high Absence of Corruption values increasing in GDP per Capita over time. The most interesting feature here is three countries with mediocre values in Absence of Corruption having high GDP per Capita near the beginning, and they fluctuate intensely across the years. These three countries are Qatar, the UAE, and Kuwait. While this happens, Singapore, a country with high Absence of Corruption, rises to the top of the continent, making the trend more positive. 
+
+In this animation, we can see the observations and fit line for each year separated by region, with each color representing one country across time. Starting in Europe, we can see a steady rise in GDP per Capita across countries with higher Absence of Corruption over the years, leading to a steeper, or more positive, relationship in recent years. Europe is also home Monaco, a country with a GDP per Capita of over 2 million, and the only country that is not visible across the graphs. The Americas produces an interesting time-lapse because most countries don’t change significantly in GDP per Capita, they slowly become less corrupt, which makes the relationship more positive. The two high outliers in this region are the USA in pink and Canada in yellow, and while they both gradually rise in GDP per Capita, the USA experiences a drop in Absence in Corruption in the late 2010s. 
+\n
+
+The African plot is the only plot to display a negative relationship at any point, which is likely because the vast majority of countries in this region have extremely low GDP per Capita, so a country with any value on the x-axis can influence the line with a spike in GDP per Capita. In particular, the countries Gabon and Libya had the highest GDP per Capita in the 1980s, despite having Absence of Corruption values in the 20’s, so they heavily increased the trend and turned it negative. But the trend in Africa eventually becomes positive. Finally, the Asia-Pacific region has features similar to all 3 other plots, with many countries close to the x-axis as well as countries with high Absence of Corruption values increasing in GDP per Capita over time. The most interesting feature here is three countries with mediocre values in Absence of Corruption having high GDP per Capita near the beginning, and they fluctuate intensely across the years. These three countries are Qatar, the UAE, and Kuwait. While this happens, Singapore, a country with high Absence of Corruption, rises to the top of the continent, making the trend more positive. 
+\n
 
 With this animation, we have strong reason to believe our original hypothesis. So now we will test the correlation with regression.
+\n
+
+## 2021 Absence Of Corruption vs GDP per Capita
+
+Below is a plot of countries and their respective Absence of Corruption Index vs. GDP Per Capita in the year 2021. At this point, we note that all of the plots from this point use 2021 as the year. This particular year is our basis, since it is has no NA values and is balanced. Furthermore, it is a recent year, fairly representative of  the current times.
+
+```{r}
+full_data |>
+  filter(Year == 2021) |>
+  ggplot(mapping = aes(x = Absence_Corruption_Index, y = GDP_Per_Capita)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Absence of Corruption vs GDP per Capita 2021", x = "Absence of Corruption", y = "GDP per Capita (USD)") +
+  theme(axis.title.y = element_text(vjust = 0.5, angle = 0), plot.title = element_text(hjust = 0.5)) +
+  scale_y_continuous(labels = comma)
+```
+
+	The scatterplot and fit line definitely indicate that there is a positive relationship between our variables. Aside from four high outliers, each data point lies relatively close to the fit line. The part that stands out the most is the amount of observations that are bunched up on the x-axis at 0. Many countries in our dataset only have a GDP per Capita in the hundreds or low thousands, so due to how the plot is scaled, they all appear on the same horizontal line. Because of this, we will try a log transformation so these observations are more visible.
+
+## Log Transformed 2021 Absence Of Corruption vs GDP per Capita
+
+```{r}
+# With Log Transformation
+full_data |>
+  filter(Year == 2021) |>
+  mutate(GDP_Per_Capita = log(GDP_Per_Capita)) |>
+  ggplot(mapping = aes(x = Absence_Corruption_Index, y = GDP_Per_Capita)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(title = "Absence of Corruption vs GDP per Capita(Log Transformed)\n 2021", x = "Absence of Corruption", y = "Log of GDP per Capita (USD)") +
+  theme(axis.title.y = element_text(vjust = 0.5, angle = 0), plot.title = element_text(hjust = 0.5))
+```
+
+	The log transformation succeeded in its goal of breaking up the lower GDP per Capita observations. However, it is likely that the strength of our model was decreased. It seems that after the log transformation, the observations broke into two “pools” separated by GDP per Capita. So while there are no outliers on this axis, the vast majority of observations in the lower pool fall below the regression line, and in the higher pool, most observations are above it. To see how much an increase in score of absence of corruption really helps GDP per Captia and how strong the correlation between the explanatory and response variables are lets closely analyze a linear regression between these two vairables.
 
 # Data Modeling & Prediction
 
@@ -299,7 +310,7 @@ tibble("R Squared Non Transformed" = summary(full_2021_data_lm)$r.squared, "R Sq
   add_title("Comparison of R Squared of Two Linear Models", font_size = 20, align = "center")
 ```
 
-With that in mind, we will be sticking with our untransformed data for the remainder of this exploration.
+With that in mind, we will be sticking with our ***untransformed data*** for the remainder of this exploration.
 
 ```{r}
 # Removes the transformed log models
@@ -308,20 +319,19 @@ remove(log_2021_data, log_2021_data_lm)
 # Summary of Linear Model :
 broom::tidy(full_2021_data_lm) |>
   rename("Regression Variable" = term, "Model Estimate" = estimate, "Standard Error" = std.error) |>
-  select(c("Regression Variable":"Standard Error"))
+  select(c("Regression Variable":"Standard Error")) |>
+  mutate_all(.funs = ~ prettyNum(.x, ","))
 ```
 
 Our linear model comparing different countries in 2021 and their respective Absence of Corruption Index vs their 2021 GDP Per Capita yields us the following results.
 
 $$
-\beta_0 = -199747.304\\
+\beta_0 = -199747.304 \\
 \beta_1 = 8211.695
-$$ which will give us the linear regression formula of : $$
-\hat{y} = -199747.304+8211.695x
 $$
-
-or rewritten with our explanatory and response variables $$
-\hat{GDP\_Per\_Captia} = -199747.304+8211.695(Absence\_Corruption\_Index)
+which will give us the linear regression formula of : 
+$$
+\widehat{GDP\_Per\_Captia} = -199747.304+8211.695(Absence\_Corruption\_Index)
 $$
 
 ## Analysis
@@ -342,6 +352,7 @@ full_2021_data_lm_resd |>
   add_title("Model Residual Stats", font_size = 20, align = "center")
 ```
 
+
 With a average residual $<|10^{-9}|$, this looks pretty promising. However, to confirm our calculations and better visualize the distributions of residuals, lets plot them on a histogram. What we expect is a normal distribution of all residuals reminiscent of the familiar bell curve.
 
 ```{r}
@@ -354,10 +365,24 @@ full_2021_data_lm_resd |> ggplot(mapping = aes(x = .resid)) +
 options(scipen = 0)
 ```
 
-\`
+Another way we can also check our linear model is through the average variance or spread of our data set.  Ideally we want our observed data to have lower variance as it means its more compactly distrubuted and easier for our model to predict
+
+```{r}
+# Variance Table for Observed, fitted and residual
+full_2021_data_lm |>
+  broom::augment() |>
+  select(GDP_Per_Capita, .fitted, .resid) |>
+  summarise(across(.cols = c(GDP_Per_Capita, .fitted, .resid), .fns = ~ var(x = .x))) |>
+  rename("Observed" = GDP_Per_Capita, "Fitted" = .fitted, "Residual" = .resid) |>
+  reactable() |>
+  add_title("Model Variance Stats", font_size = 20, align = "center") |>
+  mutate_all(.funs = ~ prettyNum(.x, ","))
+```
+
+Considering that we are working with thousands of dollars, a variance of 53038666343.0201 is alright, though its still quite far off our fitted (predicted model) variance of 26790021214.0854, so our model could be alot better.  Only simulations will tell how truly accurate this model is.
 
 ## Simulations and Model
-
+ Lastly lets perform a simulation on our data to see how our model performs compared to our observed data.  In this simulation we will only be dealing with ***2021*** data as it has no NAs and represents the state of the world as it is currently in the early 21st century
 ```{r}
 observed_2021_data <- full_2021_data |>
   select(GDP_Per_Capita) |>
@@ -366,6 +391,7 @@ observed_2021_data <- full_2021_data |>
 predicted_2021_data <- full_2021_data_lm |> predict()
 ```
 
+After grabbing our predicted and observed values for each country from 2021 we will introduce the standard error into our predicted data just to make it more realistic.  Afterwards we will compared this modified simulated data to our gathered observed values.  If our model is a good fit we should expect, a $R^2$ value close tp 1 meaning that nearly all our (noise-induced) simulated data closely matches our observed data. We will then run 5000 trials and look at the minimum, average and maximum $R^2$
 
 ```{r}
 generateRealisticPredictions <- function(predictedValues, standardError) {
@@ -385,7 +411,8 @@ findModelFit <- function(linearModel) {
 
 ```{r}
 set.seed(05081995)
-sim_model_res <- map_dbl(.x = c(1:100), .f = ~ findModelFit(full_2021_data_lm))
+sim_model_res <- map_dbl(.x = c(1:5000), .f = ~ findModelFit(full_2021_data_lm))
+mean_sim_model_res <- mean(sim_model_res)
 summary(sim_model_res) |>
   unclass() |>
   as.list() |>
@@ -396,8 +423,10 @@ summary(sim_model_res) |>
   reactable() |>
   add_title("Model Residual Simulations Stats", font_size = 20, align = "center")
 ```
-Plotting the $R^2$ on a histogram we get 
 
+Oh... it seems like our model was as good as we originally predicted.  After standard error injection, only about `r mean_sim_model_res` or `r mean_sim_model_res*100` % of observed data can be modeled using our simulated data. 
+
+We can more visually see the spread of $R^2$ we got from our 5000 simulations from plotting the $R^2$ results on a histogram
 ```{r,fig.width=9}
 options(scipen = 100)
 sim_model_res |>
@@ -410,29 +439,60 @@ sim_model_res |>
   theme(axis.title.y = element_text(angle = 0, vjust = 0.5), plot.title = element_text(hjust = 0.5))
 ```
 
-<<<<<<< Updated upstream
+
+# Addressing the NAs into consideration
+
+Earlier we touched on the NAs present in our Absent of Corruption within our data, and listed some potential reasons for their absense.  Now we will plot all entries that have NAs and their respective GDP per Capita for that year to verify if our original hypothesis is correct.  We will also count the number of NAs from each region to see if we notice any trends between their regions and absence of any curruption information
 
 ```{r}
 # Histogram of gpd-per capita by countries with N/A value for Corruption Index Value
 na_data <- full_data |>
   filter(is.na(Absence_Corruption_Index))
-
-names(na_data)
 ```
-
 
 ```{r}
 ggplot(na_data, aes(x = GDP_Per_Capita)) +
   geom_histogram() +
-  scale_x_continuous(breaks = seq(min(na_data$GDP_Per_Capita), max(na_data$GDP_Per_Capita), by = 26000)) +
-  labs(x = "GDP Per Capita", y= "Number of Countries", title = "GDP Per Capita For Countries Missing Corruption Index Values") +
-  geom_density(colour = "steelblue") +
+  scale_x_continuous(breaks = seq(min(na_data$GDP_Per_Capita), max(na_data$GDP_Per_Capita), by = 50000)) +
+  labs(x = "GDP Per Capita", y = "Number of Countries", title = "GDP Per Capita For Countries Missing Corruption Index Values") +
   theme(axis.title.y = element_text(angle = 0, vjust = 0.5), plot.title = element_text(hjust = 0.5))
 ```
-The above histogram depicts the distribution of GPD's Per Capita amongst countries that have missing values (N/A) for the absence of corruption index. This histogram includes all years from the original data set, 1975-2021, and all countries from this grouping are included, to better depict the distribution. The graph shows that there is a very large amount of countries, around 120, that have very low GDP's per capita (around the several thousand dollars range) and do not contain values for absence of corruption. Aside from this, there appears to be a slightly right-skewed distribution centered at about 150,000, containing the remainder of the data from our sub-set group. Additionally, the max of this right tail hovers around 280,000. 
 
 ```{r}
-# Variance Table for Observed, fitted and residual 
-full_2021_data_lm |> broom::augment() |> select(GDP_Per_Capita,.fitted,.resid) |> summarise(across(.cols = c(GDP_Per_Capita,.fitted,.resid), .fns =~var(x = .x))) |> rename("Observed" = GDP_Per_Capita,"Fitted" = .fitted,"Residual" = .resid) |> reactable() |>
-  add_title("Model Variance Stats", font_size = 20, align = "center")
+country_region <- full_2021_data |> select(country, region)
+na_data_rich <- na_data |> filter(GDP_Per_Capita >= 50000)
+na_after_soviet <- na_data |> filter(Year > 1991)
+na_data |>
+  group_by(country) |>
+  summarise(NumbersOfNAEnrties = n()) |>
+  inner_join(country_region, by = "country") |>
+  slice_max(order_by = NumbersOfNAEnrties, n = 10, with_ties = FALSE) |>
+  rename("Number of NA Enrties" = NumbersOfNAEnrties, "Region" = region, "Country" = country) |>
+  reactable() |>
+  add_title("Number of NAs from Countries", font_size = 20, align = "center") |>
+  add_title("Ordered by Number of NAs", font_size = 12, align = "center")
+na_after_soviet |>
+  group_by(country) |>
+  summarise(NumbersOfNAEnrties = n()) |>
+  inner_join(country_region, by = "country") |>
+  slice_max(order_by = NumbersOfNAEnrties, n = 10, with_ties = FALSE) |>
+  rename("Number of NA Enrties" = NumbersOfNAEnrties, "Region" = region, "Country" = country) |>
+  reactable() |>
+  add_title("Number of NAs from Countries\n Post Collapse of the Soviet Union: 1991", font_size = 20, align = "center") |>
+  add_title("Ordered by Number of NAs", font_size = 12, align = "center")
+na_data_rich |>
+  group_by(country) |>
+  summarise(NumbersOfNAEnrties = n()) |>
+  inner_join(country_region, by = "country") |>
+  slice_max(order_by = NumbersOfNAEnrties, n = 10, with_ties = FALSE) |>
+  rename("Number of NA Enrties" = NumbersOfNAEnrties, "Region" = region, "Country" = country) |>
+  reactable() |>
+  add_title("Number of NAs from Countries \n w GDP Per Capita over 50K USD", font_size = 20, align = "center") |>
+  add_title("Ordered by Number of NAs", font_size = 12, align = "center")
 ```
+
+
+The above histogram depicts the distribution of GPD's Per Capita amongst countries that have missing values (N/A) for the absence of corruption index. This histogram includes all years from the original data set, 1975-2021, and all countries from this grouping are included, to better depict the distribution. The graph shows that there is a very large amount of countries, around 120, that have very low GDP's per capita (around the several thousand dollars range) and do not contain values for absence of corruption. Aside from this, there appears to be a slightly right-skewed distribution centered at about 150,000, containing the remainder of the data from our sub-set group. Additionally, the max of this right tail hovers around 280,000. Some of this variation could be explained that less fortunate countries has less resources to measure these indexes.  Additionally we see that many of these counties are "newer" countries, and only have formed in the past 30 years[@bymattrosenberg_2019_the] number particularly from previously Soviet states.  That being said, the large number of NAs from poorer countries, still possibly suggests that there leaders and governments are deliberate action taken to attempt to hide internal corruption, maybe spending the countries resources for their own benefit instead of reform and social welfare programs. The smaller but still significant "clump" of NAs on the right primary are composed of 2 groups, 1: rich monarchies trying to hide their powers like some in the Middle East as discussed earlier or 2: more present in this data, Eastern Europe nations particularly the Baltics[@slund_2015_the] and to a lesser extent Balkans getting really rich as demonstrated in the 3rd table above which shows NA values with GDP per Captia over $\$50,000$ , $\frac{9}{10}$ of the countries were of European countries and half of them are now part of the EU[@theeuropeanunion_2023_easy], therefore, overall in many regards, the NAs should not be a major issue we need to contend with.  For those countries that have been established for a while, a missing NAs does raise quite a suspicion of what their government are up to.
+
+# Conclsuion
+Overall after all our analysis and models we still believe that an country's absence of corruption index still has some role in shaping the GDP per Captia of a country.  While not as strong and cohesive as we originally hypothesis, the overall however corruption among weather nations does still have us think it the absence of corruption index have a role in influencing ones economy.  Nonetheless if this data has shown us anything, it is the fact that there's no one factor that determines one country's GDP per Captia, geography, access to natural resources, population, labor force, political structure and stability all contribute in shaping the GDP Per Captia.
