@@ -36,9 +36,10 @@ For GitHub Desktop simply hit the open in GitHub Desktop option under the green 
 For R Studio users clone the project by creating a new project, then selecting the Version Control option from the menu.  Then copy the HTTPS URL from green clone button of the main repository [^2].
 [^2]: You will need to already have established a connection with GitHub through R Studio ie: auth token before cloning.
 
-For Git CLI users open your terminal and run `git –version` to make sure you have Git Installed. macOS and Linux users should have this installed by default while windows box users will need to obtain a copy of [Git] from their official website.  Afterwards you can `cd`[^3] into your desired directory and run `git clone git@github.com:Brian-Kwong/STAT-331-Final-Project-Group6.git` to get a copy of the project[^4].  Then procced to R Studio and open the .Rproj file from the open project in the menu bar and open the Quarto Document of the report located in the Src Folder
+For Git CLI users open your terminal and run `git –version` to make sure you have Git Installed. macOS and Linux users should have this installed by default while windows box users will need to obtain a copy of [Git] from their official website.  Afterwards you can `cd`[^3], into your desired directory and run `git clone git@github.com:Brian-Kwong/STAT-331-Final-Project-Group6.git` to get a copy of the project[^4].  Then procced to R Studio and open the .Rproj file from the open project in the menu bar and open the Quarto Document of the report located in the Src Folder
 
-[^3[: The cd or change directory command is the standard Unix commnand for changing around directories(folders) using the terminal.  It also works on Windows too!
+[^3]: The cd or change directory command is the standard Unix commnand for changing around directories(folders) using the terminal.  It also works on Windows too!
+
 [^4]: Since early 2022 GitHub CLI has required SSH authentication for cloning of repositories. [Learn how to set up SSH Keys for GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
 
 Lastly you could just download the zip file, by clicking download as zip option from green clone button of the main repository, copy the folder to a desired location and unzip. Then procced to R Studio and open the .Rproj file from the open project in the menu bar and open the Quarto Document of the report located in the Src Folder
