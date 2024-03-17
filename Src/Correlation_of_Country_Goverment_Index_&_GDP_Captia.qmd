@@ -30,7 +30,7 @@ Please make sure you have the following libraries installed:
 5. Reactablefmtr
 6. Gganimate
 7. Gifski
-8. formattable
+8. Formattable
 
 ```{r}
 #| output: False
