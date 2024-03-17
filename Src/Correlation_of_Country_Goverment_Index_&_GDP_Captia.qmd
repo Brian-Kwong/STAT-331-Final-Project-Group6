@@ -23,13 +23,14 @@ bibliography: references.bib
 
 Please make sure you have the following libraries installed:
 
-1.  Tidyverse
-2.  Here
-3.  Janitor
-4.  Styler
-5.  Reactablefmtr
-6.  gganimate
-7.  gifski
+1. Tidyverse
+2. Here
+3. Janitor
+4. Styler
+5. Reactablefmtr
+6. Gganimate
+7. Gifski
+8. formattable
 
 ```{r}
 #| output: False
@@ -197,7 +198,10 @@ full_data |>
   select(Absence_Corruption_Index, GDP_Per_Capita) |>
   drop_na() |>
   rename("Absence Corruption Index" = Absence_Corruption_Index, " GDP Per Capita (USD)" = GDP_Per_Capita) |>
-  mutate_all(.funs = ~ prettyNum(.x, ","))
+  mutate_all(.funs = ~ prettyNum(.x, ",")) |>
+  reactable() |>
+  add_title("Summary of
+Absence Corruption Index & GDP Per Capita Data", font_size = 20, align = "center")
 ```
 
 ## About those Pesky NAs
@@ -320,7 +324,9 @@ remove(log_2021_data, log_2021_data_lm)
 broom::tidy(full_2021_data_lm) |>
   rename("Regression Variable" = term, "Model Estimate" = estimate, "Standard Error" = std.error) |>
   select(c("Regression Variable":"Standard Error")) |>
-  mutate_all(.funs = ~ prettyNum(.x, ","))
+  mutate_all(.funs = ~ prettyNum(.x, ",")) |>
+  reactable() |>
+  add_title("Linear Model Stats", font_size = 20, align = "center")
 ```
 
 Our linear model comparing different countries in 2021 and their respective Absence of Corruption Index vs their 2021 GDP Per Capita yields us the following results.
@@ -374,9 +380,9 @@ full_2021_data_lm |>
   select(GDP_Per_Capita, .fitted, .resid) |>
   summarise(across(.cols = c(GDP_Per_Capita, .fitted, .resid), .fns = ~ var(x = .x))) |>
   rename("Observed" = GDP_Per_Capita, "Fitted" = .fitted, "Residual" = .resid) |>
+  mutate_all(.funs = ~ prettyNum(.x, ",")) |>
   reactable() |>
-  add_title("Model Variance Stats", font_size = 20, align = "center") |>
-  mutate_all(.funs = ~ prettyNum(.x, ","))
+  add_title("Model Variance Stats", font_size = 20, align = "center")
 ```
 
 Considering that we are working with thousands of dollars, a variance of 53038666343.0201 is alright, though its still quite far off our fitted (predicted model) variance of 26790021214.0854, so our model could be alot better.  Only simulations will tell how truly accurate this model is.
