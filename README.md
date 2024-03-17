@@ -13,7 +13,7 @@ There has often been a standing debate on how transparency and perceived corrupt
 
 ## Data Used In Report
 
-The data studied throughout this report is provided by [GapMinder's 2023 IDEA-Democracy Indices Data - v5](https://docs.google.com/spreadsheets/d/1jYUZFQOQrE0bAjV9XVgr_92nMT-_ukYBs4Uom4rfVtQ/edit#gid=501532268&range=B17) and we would be focusing on the following variables.
+The data studied throughout this report is provided by [GapMinder's 2023 IDEA-Democracy Indices Data - v5](https://docs.google.com/spreadsheets/d/1jYUZFQOQrE0bAjV9XVgr_92nMT-_ukYBs4Uom4rfVtQ/edit#gid=501532268&range=B17) and we would be focusing on the following variables:
 
 | Variable | Type | Description |
 |--|--|--|
